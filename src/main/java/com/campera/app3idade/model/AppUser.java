@@ -29,7 +29,7 @@ public class AppUser implements UserDetails {
 	@Getter	@Setter
 	private String email;
 	@Setter
-	private String senha;
+	private String password;
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Authority> authorityList = new ArrayList<Authority>();
 
@@ -64,7 +64,7 @@ public class AppUser implements UserDetails {
 	}
 	@Override
 	public String getPassword() {
-		return this.senha;
+		return this.password;
 	}
 	@Override
 	public String getUsername() {
