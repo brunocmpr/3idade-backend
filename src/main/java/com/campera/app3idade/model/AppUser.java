@@ -1,9 +1,11 @@
 package com.campera.app3idade.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
 public class AppUser implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -29,9 +32,22 @@ public class AppUser implements UserDetails {
 	@Getter	@Setter
 	private String email;
 	@Setter
-	private String password;
+	private String hashedPassword;
+	@Transient  @Setter
+	private String rawPassword;
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Authority> authorityList = new ArrayList<Authority>();
+
+	public AppUser(String firstName, String lastName, String countryCode, String areaCode, String phoneNumber,
+				   String email, String hashedPassword){
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.countryCode = countryCode;
+		this.areaCode = areaCode;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.hashedPassword = hashedPassword;
+	}
 
 	@Override
 	public int hashCode() {
@@ -62,9 +78,8 @@ public class AppUser implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.authorityList;
 	}
-	@Override
 	public String getPassword() {
-		return this.password;
+		return this.hashedPassword;
 	}
 	@Override
 	public String getUsername() {

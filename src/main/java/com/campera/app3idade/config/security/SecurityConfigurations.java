@@ -1,6 +1,6 @@
 package com.campera.app3idade.config.security;
 
-import com.campera.app3idade.repository.UserRepository;
+import com.campera.app3idade.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(authService)
@@ -34,12 +34,13 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
+                .antMatchers(HttpMethod.POST, "/appuser").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(
                         new TokenAuthenticationFilter(
-                                tokenService, userRepository),UsernamePasswordAuthenticationFilter.class
+                                tokenService, appUserRepository),UsernamePasswordAuthenticationFilter.class
                 );
     }
 
