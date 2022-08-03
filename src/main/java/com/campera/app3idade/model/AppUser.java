@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class AppUser implements UserDetails {
 	private String hashedPassword;
 	@Transient  @Setter
 	private String rawPassword;
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)  @Getter
 	private List<Authority> authorityList = new ArrayList<Authority>();
 
 	public AppUser(String firstName, String lastName, String countryCode, String areaCode, String phoneNumber,
@@ -47,6 +46,10 @@ public class AppUser implements UserDetails {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.hashedPassword = hashedPassword;
+	}
+
+	public boolean addAuthority(Authority authority){
+		return this.authorityList.add(authority);
 	}
 
 	@Override
