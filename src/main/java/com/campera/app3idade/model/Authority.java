@@ -1,24 +1,31 @@
 package com.campera.app3idade.model;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+public enum Authority implements GrantedAuthority {
+    SYSADMIN("SYSADMIN"),
 
-@Entity
-public class Authority implements GrantedAuthority{
+    ACCOUNT_ADMIN("ACCOUNT_ADMIN"),
+    CAREGIVER("CAREGIVER"),
+    PATIENT("PATIENT"),
+    ;
 
-	private static final long serialVersionUID = 1L;
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)  @Getter @Setter
-	private Long id;
-	@Getter @Setter
-	private String name;
-	@Override
-	public String getAuthority() {
-		return name;
-	}
+    private final String name;
+
+    Authority(final String name) {
+        this.name = name;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Enum#toString()
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }

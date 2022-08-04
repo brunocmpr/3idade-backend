@@ -1,6 +1,7 @@
 package com.campera.app3idade.service;
 
 import com.campera.app3idade.model.AppUser;
+import com.campera.app3idade.model.Authority;
 import com.campera.app3idade.model.datatransfer.conversion.AppUserConverter;
 import com.campera.app3idade.model.datatransfer.dto.AppUserDto;
 import com.campera.app3idade.model.datatransfer.form.AppUserForm;
@@ -15,6 +16,8 @@ public class AppUserService {
 
     public AppUserDto register(AppUserForm appUserForm){
         AppUser appUser = AppUserConverter.convertFromForm(appUserForm);
+        appUser.addAuthority(Authority.ACCOUNT_ADMIN);
+        appUser.addAuthority(Authority.CAREGIVER);
         appUser = userRepository.save(appUser);
         return AppUserConverter.convertToDto(appUser);
     }

@@ -7,9 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
@@ -34,8 +32,8 @@ public class AppUser implements UserDetails {
 	private String hashedPassword;
 	@Transient  @Setter
 	private String rawPassword;
-	@ManyToMany(fetch = FetchType.EAGER)  @Getter
-	private List<Authority> authorityList = new ArrayList<Authority>();
+	@ElementCollection(fetch = FetchType.EAGER) @CollectionTable(name = "user_authority_mapping" )  @Getter
+	private Set<Authority> authorityList = EnumSet.noneOf(Authority.class);
 
 	public AppUser(String firstName, String lastName, String countryCode, String areaCode, String phoneNumber,
 				   String email, String hashedPassword){
@@ -50,6 +48,9 @@ public class AppUser implements UserDetails {
 
 	public boolean addAuthority(Authority authority){
 		return this.authorityList.add(authority);
+	}
+	public boolean removeAuthority(Authority authority){
+		return this.authorityList.remove(authority);
 	}
 
 	@Override
